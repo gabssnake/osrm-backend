@@ -40,8 +40,8 @@ Feature: Basic Distance Matrix
             | nodes | highway  | toll | #                                        |
             | ab    | motorway |      | not drivable for exclude=motorway        |
             | cd    | primary  |      | always drivable                          |
-            | ac    | highway  | yes  | not drivable for exclude=toll and exclude=motorway,toll |
-            | bd    | highway  | yes  | not drivable for exclude=toll |
+            | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
+            | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
         When I request a travel time matrix I should get
             |   | a  | b  | c  | d  |
@@ -71,23 +71,22 @@ Feature: Basic Distance Matrix
             | nodes | highway  | toll | #                                        |
             | ab    | motorway |      | not drivable for exclude=motorway        |
             | cd    | primary  |      | always drivable                          |
-            | ac    | highway  | yes  | not drivable for exclude=toll and exclude=motorway,toll |
-            | bd    | highway  | yes  | not drivable for exclude=toll |
-
+            | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
+            | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
         When I request a travel time matrix I should get
             |   | a  | b  | c  | d  |
-            | a | 0  | 40 | 15 | 25 |
-            | b | 40 | 0  | 25 | 15 |
-            | c | 15 | 25 | 0  | 10 |
-            | d | 25 | 15 | 10 | 0  |
+            | a | 0  |    |    |    |
+            | b |    | 0  |    |    |
+            | c |    |    | 0  | 10 |
+            | d |    |    | 10 | 0  |
 
         When I request a travel distance matrix I should get
             |   |   a    |   b    |   c    |   d    |
-            | a |   0    | 399.95 | 99.99  | 299.96 |
-            | b | 399.95 |   0    | 299.95 | 99.99  |
-            | c | 100.01 | 299.96 |   0    | 199.97 |
-            | d | 299.96 | 99.99  | 199.95 |   0    |
+            | a |   0    |        |        |        |
+            | b |        |   0    |        |        |
+            | c |        |        |   0    |  99.97 |
+            | d | 299.96 |        |  99.95 |   0    |
 
 
     Scenario: Testbot - Travel time matrix of minimal network with excludes combination
@@ -104,22 +103,22 @@ Feature: Basic Distance Matrix
             | nodes | highway  | toll | #                                        |
             | ab    | motorway |      | not drivable for exclude=motorway        |
             | cd    | primary  |      | always drivable                          |
-            | ac    | highway  | yes  | not drivable for exclude=toll and exclude=motorway,toll |
-            | bd    | highway  | yes  | not drivable for exclude=toll |
+            | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
+            | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
         When I request a travel time matrix I should get
             |   | a  | b  | c  | d  |
-            | a | 0  | 10 | 0  | 10 |
-            | b | 10 | 0  | 10 | 0  |
-            | c | 0  | 10 | 0  | 10 |
-            | d | 10 | 0  | 10 | 0  |
+            | a | 0  |    |    |    |
+            | b |    | 0  |    |    |
+            | c |    |    | 0  | 10 |
+            | d |    |    | 10 |  0 |
 
         When I request a travel distance matrix I should get
-            |   |  a    |  b    |  c     |  d    |
-            | a |  0    | 99.98 |  0     | 99.98 |
-            | b | 99.98 |  0    | 99.98  |  0    |
-            | c |  0    | 99.98 |  0     | 99.98 |
-            | d | 99.98 |  0    | 99.98  |  0    |
+            |   | a  | b  | c     | d     |
+            | a | 0  |    |       |       |
+            | b |    | 0  |       |       |
+            | c |    |    | 0     | 99.98 |
+            | d |    |    | 99.98 |  0    |
 
     Scenario: Testbot - Travel time matrix with different way speeds
         Given the node map
@@ -143,9 +142,9 @@ Feature: Basic Distance Matrix
         When I request a travel distance matrix I should get
             |   |   a    |   b    |    c   |    d   |
             | a |   0    | 99.98  | 199.95 | 299.93 |
-            | b |   0    |   0    | 99.98  | 199.95 |
-            | c | 99.98  | 99.98  |   0    | 99.98  |
-            | d | 299.93 | 299.93 | 199.95 |   0    |
+            | b | 99.98  |   0    | 99.98  | 199.95 |
+            | c | 199.95 | 99.98  |   0    | 99.98  |
+            | d | 299.93 | 199.95 | 99.98  |   0    |
 
         When I request a travel time matrix I should get
             |   | a  | b  | c  | d  |
@@ -165,29 +164,9 @@ Feature: Basic Distance Matrix
         When I request a travel distance matrix I should get
             |   |   a    |
             | a |   0    |
-            | b |   0    |
-            | c | 99.98  |
+            | b | 99.98  |
+            | c | 199.95 |
             | d | 299.93 |
-
-    Scenario: Testbot - Travel time matrix with fuzzy match
-        Given the node map
-            """
-            a b
-            """
-
-        And the ways
-            | nodes |
-            | ab    |
-
-        When I request a travel time matrix I should get
-            |   | a  | b  |
-            | a | 0  | 10 |
-            | b | 10 | 0  |
-
-        When I request a travel distance matrix I should get
-            |   |   a   |   b   |
-            | a | 0     | 99.98 |
-            | b | 99.98 | 0     |
 
     Scenario: Testbot - Travel time matrix of small grid
         Given the node map
@@ -214,9 +193,9 @@ Feature: Basic Distance Matrix
         When I request a travel distance matrix I should get
             |   |   a    |   b    |   e    |   f    |
             | a |   0    | 99.98  | 199.97 | 299.95 |
-            | b | 99.98  | 0      | 0.02   | 199.97 |
-            | e | 99.99  | 0.02   | 0      | 199.97 |
-            | f | 299.93 | 199.95 | 199.95 | 0      |
+            | b | 99.98  |   0    | 99.98  | 199.97 |
+            | e | 199.97 | 99.98  |   0    |  99.98 |
+            | f | 299.93 | 199.95 | 99.98  |   0    |
 
 
     Scenario: Testbot - Travel time matrix of network with unroutable parts
