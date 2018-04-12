@@ -13,7 +13,8 @@ tables.forEach(function(annotation) {
         assert.plan(11);
         var osrm = new OSRM(data_path);
         var options = {
-            coordinates: [three_test_coordinates[0], three_test_coordinates[1]]
+            coordinates: [three_test_coordinates[0], three_test_coordinates[1]],
+            annotations: [annotation.slice(-1)]
         };
         osrm.table(options, function(err, table) {
             assert.ifError(err);
@@ -45,7 +46,8 @@ tables.forEach(function(annotation) {
         var options = {
             coordinates: [three_test_coordinates[0], three_test_coordinates[1]],
             sources: [0],
-            destinations: [0,1]
+            destinations: [0,1],
+            annotations: [annotation.slice(-1)]
         };
         osrm.table(options, function(err, table) {
             assert.ifError(err);
@@ -74,7 +76,7 @@ tables.forEach(function(annotation) {
     test('table: ' + annotation + ' throws on invalid arguments', function(assert) {
         assert.plan(14);
         var osrm = new OSRM(data_path);
-        var options = {};
+        var options = {annotations: [annotation.slice(-1)]};
         assert.throws(function() { osrm.table(options); },
             /Two arguments required/);
         options.coordinates = null;
@@ -137,7 +139,8 @@ tables.forEach(function(annotation) {
         var osrm = new OSRM(data_path);
         var options = {
             coordinates: two_test_coordinates,
-            generate_hints: true  // true is default but be explicit here
+            generate_hints: true,   // true is default but be explicit here
+            annotations: [annotation.slice(-1)]
         };
         osrm.table(options, function(err, table) {
             console.log(table);
@@ -157,7 +160,8 @@ tables.forEach(function(annotation) {
         var osrm = new OSRM(data_path);
         var options = {
             coordinates: two_test_coordinates,
-            generate_hints: false  // true is default
+            generate_hints: false,  // true is default
+            annotations: [annotation.slice(-1)]
         };
         osrm.table(options, function(err, table) {
             assert.ifError(err);
@@ -176,7 +180,8 @@ tables.forEach(function(annotation) {
         var osrm = new OSRM({path: mld_data_path, algorithm: 'MLD'});
         var options = {
             coordinates: two_test_coordinates,
-            exclude: ['motorway']
+            exclude: ['motorway'],
+            annotations: [annotation.slice(-1)]
         };
         osrm.table(options, function(err, response) {
             assert.ifError(err);
