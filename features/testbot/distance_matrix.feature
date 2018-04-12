@@ -239,11 +239,11 @@ Feature: Basic Distance Matrix
             | e | 30 | 40  | 10 | 0  |
 
         When I request a travel distance matrix I should get
-     |   |     x   |     y   |     d   |     e   |
-     | x |     0   |  299.93 |  399.92 |  299.95 |
-     | y |  499.92 |     0   |  299.95 |  199.97 |
-     | d |  199.97 |  299.95 |    0    |  299.96 |
-     | e |  299.95 |  399.92 |  99.98  |    0    |
+            |   |     x   |     y   |     d   |     e   |
+            | x |     0   |  299.93 |  399.92 |  299.95 |
+            | y |  499.92 |     0   |  299.95 |  199.97 |
+            | d |  199.97 |  299.95 |    0    |  299.96 |
+            | e |  299.95 |  399.92 |  99.98  |    0    |
 
     Scenario: Testbot - Rectangular travel time matrix
         Given the node map
@@ -304,6 +304,50 @@ Feature: Basic Distance Matrix
             | f | 30 | 20 | 10 |  0 |
 
 
+        When I request a travel distance matrix I should get
+            |   | a | b     | e      | f      |
+            | a | 0 | 99.98 | 199.97 | 299.95 |
+
+        When I request a travel distance matrix I should get
+            |   | a      |
+            | a | 0      |
+            | b | 99.98  |
+            | e | 199.97 |
+            | f | 299.95 |
+
+        When I request a travel distance matrix I should get
+            |   | a     | b     | e      | f      |
+            | a | 0     | 99.98 | 199.97 | 299.95 |
+            | b | 99.98 | 0     | 99.98  | 199.97 |
+
+        When I request a travel distance matrix I should get
+            |   | a      | b      |
+            | a | 0      | 99.98  |
+            | b | 99.98  | 0      |
+            | e | 199.97 | 99.98  |
+            | f | 299.95 | 199.97 |
+
+        When I request a travel distance matrix I should get
+            |   | a      | b     | e      | f      |
+            | a | 0      | 99.98 | 199.97 | 299.95 |
+            | b | 99.98  | 0     | 99.98  | 199.97 |
+            | e | 199.97 | 99.98 | 0      | 99.98  |
+
+        When I request a travel distance matrix I should get
+            |   | a      | b      | e      |
+            | a | 0      | 99.98  | 199.97 |
+            | b | 99.98  | 0      | 99.98  |
+            | e | 199.97 | 99.98  | 0      |
+            | f | 299.95 | 199.97 | 99.98  |
+
+        When I request a travel distance matrix I should get
+            |   | a      | b      | e      | f      |
+            | a | 0      | 99.98  | 199.97 | 299.95 |
+            | b | 99.98  | 0      | 99.98  | 199.97 |
+            | e | 199.97 | 99.98  | 0      | 99.98  |
+            | f | 299.95 | 199.97 | 99.98  | 0      |
+
+
      Scenario: Testbot - Travel time 3x2 matrix
         Given the node map
             """
@@ -323,6 +367,11 @@ Feature: Basic Distance Matrix
             |   | b  | e  | f  |
             | a | 10 | 20 | 30 |
             | b | 0  | 10 | 20 |
+
+        When I request a travel distance matrix I should get
+            |   | b     | e      | f      |
+            | a | 99.98 | 199.97 | 299.95 |
+            | b | 0     | 99.98  | 199.97 |
 
     Scenario: Testbot - All coordinates are from same small component
         Given a grid size of 300 meters
@@ -345,6 +394,11 @@ Feature: Basic Distance Matrix
             |   | f  | g  |
             | f | 0  | 30 |
             | g | 30 |  0 |
+
+        When I request a travel distance matrix I should get
+            |   | f      | g      |
+            | f | 0      | 299.98 |
+            | g | 299.98 | 0      |
 
     Scenario: Testbot - Coordinates are from different small component and snap to big CC
         Given a grid size of 300 meters
@@ -371,6 +425,13 @@ Feature: Basic Distance Matrix
             | h | 0  | 30 | 0  | 30 |
             | i | 30 |  0 | 30 | 0  |
 
+        When I request a travel distance matrix I should get
+            |   | f      | g      | h      | i      |
+            | f | 0      | 599.91 | 0      | 599.91 |
+            | g | 599.91 | 0      | 599.91 | 0      |
+            | h | 0      | 599.91 | 0      | 599.91 |
+            | i | 599.91 | 0      | 599.91 | 0      |
+
     Scenario: Testbot - Travel time matrix with loops
         Given the node map
             """
@@ -386,11 +447,18 @@ Feature: Basic Distance Matrix
             | da    | yes |
 
         When I request a travel time matrix I should get
-            |   | 1      | 2      | 3      | 4  |
+            |   | 1      | 2      | 3      | 4      |
             | 1 | 0      | 10 +-1 | 40 +-1 | 50 +-1 |
             | 2 | 70 +-1 | 0      | 30 +-1 | 40 +-1 |
             | 3 | 40 +-1 | 50 +-1 | 0      | 10 +-1 |
-            | 4 | 30 +-1 | 40 +-1 | 70 +-1 | 0  |
+            | 4 | 30 +-1 | 40 +-1 | 70 +-1 | 0      |
+
+        When I request a travel distance matrix I should get
+            |   | 1          | 2          | 3          | 4          |
+            | 1 | 0          | 99.98 +-1  | 399.92 +-1 | 499.92 +-1 |
+            | 2 | 699.92 +-1 | 0          | 299.95 +-1 | 399.92 +-1 |
+            | 3 | 399.92 +-1 | 499.92 +-1 | 0          | 99.98 +-1  |
+            | 4 | 299.95 +-1 | 399.92 +-1 | 699.92 +-1 | 0          |
 
     Scenario: Testbot - Travel time matrix based on segment durations
         Given the profile file
@@ -433,6 +501,13 @@ Feature: Basic Distance Matrix
           | d | 33 | 22 | 11 |  0 | 22 |
           | e | 33 | 22 | 11 | 22 |  0 |
 
+        When I request a travel distance matrix I should get
+          |   | a      | b      | c      | d      | e      |
+          | a | 0      | 99.98  | 199.95 | 299.95 | 399.92 |
+          | b | 99.98  | 0      | 99.98  | 199.97 | 299.96 |
+          | c | 199.97 | 99.98  | 0      | 99.98  | 199.98 |
+          | d | 299.95 | 199.97 | 99.98  | 0      | 299.95 |
+          | e | 399.92 | 299.96 | 199.97 | 299.95 | 0      |
 
     Scenario: Testbot - Travel time matrix for alternative loop paths
         Given the profile file
@@ -481,6 +556,16 @@ Feature: Basic Distance Matrix
           | 7 | 3.1 | 2.1 | 6.1 | 5.1 |  9.1 | 8.1 |   0 |  11 |
           | 8 | 4.1 | 3.1 | 7.1 | 6.1 | 10.1 | 9.1 |   1 | 0   |
 
+        When I request a travel distance matrix I should get
+          |   | 1      | 2       | 3      | 4       | 5      | 6       | 7      | 8       |
+          | 1 | 0      | 1099.84 | 299.96 | 199.97  | 599.91 | 499.93  | 899.87 | 799.88  |
+          | 2 | 99.98  | 0       | 399.94 | 299.95  | 699.89 | 599.91  | 999.85 | 899.86  |
+          | 3 | 899.86 | 799.88  | 0      | 1099.83 | 299.95 | 199.97  | 599.91 | 499.92  |
+          | 4 | 999.85 | 899.87  | 99.99  | 0       | 399.94 | 299.96  | 699.9  | 599.91  |
+          | 5 | 599.91 | 499.93  | 899.87 | 799.88  | 0      | 1099.84 | 299.96 | 199.97  |
+          | 6 | 699.89 | 599.91  | 999.85 | 899.86  | 99.98  | 0       | 399.94 | 299.95  |
+          | 7 | 299.95 | 199.97  | 599.91 | 499.92  | 899.86 | 799.88  | 0      | 1099.83 |
+          | 8 | 399.94 | 299.96  | 699.9  | 599.91  | 999.85 | 899.87  | 99.99  | 0       |
 
     Scenario: Testbot - Travel time matrix with ties
         Given the profile file
@@ -529,3 +614,14 @@ Feature: Basic Distance Matrix
           | b |  1 |
           | c | 15 |
           | d | 10 |
+
+        When I request a travel distance matrix I should get
+          |   | a | b      | c      | d      |
+          | a | 0 | 299.93 | 199.97 | 499.92 |
+
+        When I request a travel distance matrix I should get
+          |   | a      |
+          | a | 0      |
+          | b | 299.95 |
+          | c | 199.97 |
+          | d | 499.92 |
