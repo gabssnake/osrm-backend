@@ -117,6 +117,15 @@ function setup()
       tertiary_link = 0.8,
     },
 
+    highway_turn_classification = {
+      primary = 1,
+      secondary = 2,
+      tertiary = 3,
+      primary_link = 1,
+      secondary_link = 2,
+      tertiary_link = 3,
+    },
+
     service_penalties = {
       alley             = 0.5,
     },
@@ -675,6 +684,16 @@ function process_turn(profile, turn)
   end
   if profile.properties.weight_name == 'cyclability' then
     turn.weight = turn.duration
+
+    -- penalties for turning onto unsafe road
+    if turn.target_highway_turn_classification == 1 then
+      turn.weight = turn.weight * 6 + 3
+    elseif turn.target_highway_turn_classification == 2 then
+      turn.weight = turn.weight * 5 + 1
+    elseif turn.target_highway_turn_classification == 3 then
+      turn.weight = turn.weight * 2
+    end
+
   end
   if turn.source_mode == mode.cycling and turn.target_mode ~= mode.cycling then
     turn.weight = turn.weight + profile.properties.mode_change_penalty
