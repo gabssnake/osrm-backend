@@ -455,6 +455,12 @@ Feature: Basic Distance Matrix
           | from | to | route | distance | time | weight |
           | a    | c  | ac,ac | 200m     | 5s   |      5 |
 
+        When I route I should get
+          | from | to | route    | distance |
+          | a    | b  | ab,ab    | 299.9m   |
+          | a    | c  | ac,ac    | 200m     |
+          | a    | d  | ac,dc,dc | 499.9m   |
+
         When I request a travel distance matrix I should get
           |   | a | b      | c      | d      |
           | a | 0 | 299.93 | 199.97 | 499.92 |
