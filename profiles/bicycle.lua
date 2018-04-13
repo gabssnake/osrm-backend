@@ -16,8 +16,8 @@ function setup()
     properties = {
       u_turn_penalty                = 20,
       traffic_light_penalty         = 2,
-      --weight_name                   = 'cyclability',
-      weight_name                   = 'duration',
+      weight_name                   = 'cyclability',
+      -- weight_name                   = 'duration',
       process_call_tagless_node     = false,
       max_speed_for_map_matching    = 110/3.6, -- kmph -> m/s
       use_turn_restrictions         = false,
@@ -31,7 +31,7 @@ function setup()
     oneway_handling           = true,
     turn_penalty              = 6,
     turn_bias                 = 1.4,
-    use_public_transport      = true,
+    use_public_transport      = false,
 
     allowed_start_modes = Set {
       mode.cycling,
