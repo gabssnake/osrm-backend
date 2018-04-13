@@ -1,12 +1,12 @@
 @matrix @testbot
 Feature: Basic Distance Matrix
-# note that results of travel time are in seconds and travel distance are in metres
+# note that results of travel distance are in metres
 
     Background:
         Given the profile "testbot"
         And the partition extra arguments "--small-component-size 1 --max-cell-sizes 2,4,8,16"
 
-    Scenario: Testbot - Travel time matrix of minimal network
+    Scenario: Testbot - Travel distance matrix of minimal network
         Given the node map
             """
             a b
@@ -16,17 +16,12 @@ Feature: Basic Distance Matrix
             | nodes |
             | ab    |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  |
-            | a | 0  | 10 |
-            | b | 10 | 0  |
-
         When I request a travel distance matrix I should get
             |   |   a   |   b   |
             | a | 0     | 99.98 |
             | b | 99.98 | 0     |
 
-    Scenario: Testbot - Travel time matrix of minimal network with excludes
+    Scenario: Testbot - Travel distance matrix of minimal network with excludes
         Given the query options
             | exclude  | toll        |
 
@@ -43,13 +38,6 @@ Feature: Basic Distance Matrix
             | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
             | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | c  | d  |
-            | a | 0  | 15 |    |    |
-            | b | 15 | 0  |    |    |
-            | c |    |    | 0  | 10 |
-            | d |    |    | 10 | 0  |
-
         When I request a travel distance matrix I should get
             |   |   a   |   b    |   c   |  d    |
             | a |   0   |  99.98 |       |       |
@@ -57,7 +45,7 @@ Feature: Basic Distance Matrix
             | c |       |        |   0   | 99.98 |
             | d |       |        | 99.98 |   0   |
 
-    Scenario: Testbot - Travel time matrix of minimal network with different exclude
+    Scenario: Testbot - Travel distance matrix of minimal network with different exclude
         Given the query options
             | exclude  | motorway  |
 
@@ -74,13 +62,6 @@ Feature: Basic Distance Matrix
             | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
             | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | c  | d  |
-            | a | 0  |    |    |    |
-            | b |    | 0  |    |    |
-            | c |    |    | 0  | 10 |
-            | d |    |    | 10 | 0  |
-
         When I request a travel distance matrix I should get
             |   |   a    |   b    |   c    |   d    |
             | a |   0    |        |        |        |
@@ -89,7 +70,7 @@ Feature: Basic Distance Matrix
             | d | 299.96 |        |  99.95 |   0    |
 
 
-    Scenario: Testbot - Travel time matrix of minimal network with excludes combination
+    Scenario: Testbot - Travel distance matrix of minimal network with excludes combination
         Given the query options
             | exclude  | motorway,toll  |
 
@@ -106,13 +87,6 @@ Feature: Basic Distance Matrix
             | ac    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
             | bd    | motorway | yes  | not drivable for exclude=toll and exclude=motorway,toll |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | c  | d  |
-            | a | 0  |    |    |    |
-            | b |    | 0  |    |    |
-            | c |    |    | 0  | 10 |
-            | d |    |    | 10 |  0 |
-
         When I request a travel distance matrix I should get
             |   | a  | b  | c     | d     |
             | a | 0  |    |       |       |
@@ -120,7 +94,7 @@ Feature: Basic Distance Matrix
             | c |    |    | 0     | 99.98 |
             | d |    |    | 99.98 |  0    |
 
-    Scenario: Testbot - Travel time matrix with different way speeds
+    Scenario: Testbot - Travel distance matrix with different way speeds
         Given the node map
             """
             a b c d
@@ -132,13 +106,6 @@ Feature: Basic Distance Matrix
             | bc    | secondary |
             | cd    | tertiary  |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | c  | d  |
-            | a | 0  | 10 | 30 | 60 |
-            | b | 10 | 0  | 20 | 50 |
-            | c | 30 | 20 | 0  | 30 |
-            | d | 60 | 50 | 30 | 0  |
-
         When I request a travel distance matrix I should get
             |   |   a    |   b    |    c   |    d   |
             | a |   0    | 99.98  | 199.95 | 299.93 |
@@ -146,20 +113,9 @@ Feature: Basic Distance Matrix
             | c | 199.95 | 99.98  |   0    | 99.98  |
             | d | 299.93 | 199.95 | 99.98  |   0    |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | c  | d  |
-            | a | 0  | 10 | 30 | 60 |
-
         When I request a travel distance matrix I should get
             |   | a |   b   |   c    |   d    |
             | a | 0 | 99.98 | 199.95 | 299.93 |
-
-        When I request a travel time matrix I should get
-            |   |  a |
-            | a |  0 |
-            | b | 10 |
-            | c | 30 |
-            | d | 60 |
 
         When I request a travel distance matrix I should get
             |   |   a    |
@@ -168,7 +124,7 @@ Feature: Basic Distance Matrix
             | c | 199.95 |
             | d | 299.93 |
 
-    Scenario: Testbot - Travel time matrix of small grid
+    Scenario: Testbot - Travel distance matrix of small grid
         Given the node map
             """
             a b c
@@ -183,13 +139,6 @@ Feature: Basic Distance Matrix
             | be    |
             | cf    |
 
-        When I request a travel time matrix I should get
-            |   | a  | b  | e  | f  |
-            | a | 0  | 10 | 20 | 30 |
-            | b | 10 | 0  | 10 | 20 |
-            | e | 20 | 10 | 0  | 10 |
-            | f | 30 | 20 | 10 | 0  |
-
         When I request a travel distance matrix I should get
             |   |   a    |   b    |   e    |   f    |
             | a |   0    | 99.98  | 199.97 | 299.95 |
@@ -198,7 +147,7 @@ Feature: Basic Distance Matrix
             | f | 299.93 | 199.95 | 99.98  |   0    |
 
 
-    Scenario: Testbot - Travel time matrix of network with unroutable parts
+    Scenario: Testbot - Travel distance matrix of network with unroutable parts
         Given the node map
             """
             a b
@@ -208,17 +157,12 @@ Feature: Basic Distance Matrix
             | nodes | oneway |
             | ab    | yes    |
 
-        When I request a travel time matrix I should get
-            |   | a | b  |
-            | a | 0 | 10 |
-            | b |   | 0  |
-
         When I request a travel distance matrix I should get
             |   | a | b        |
             | a | 0 | 99.98    |
             | b |   | 0        |
 
-    Scenario: Testbot - Travel time matrix of network with oneways
+    Scenario: Testbot - Travel distance matrix of network with oneways
         Given the node map
             """
             x a b y
@@ -231,13 +175,6 @@ Feature: Basic Distance Matrix
             | xa    |        |
             | by    |        |
 
-        When I request a travel time matrix I should get
-            |   | x  | y   | d  | e  |
-            | x | 0  | 30  | 40 | 30 |
-            | y | 50 | 0   | 30 | 20 |
-            | d | 20 | 30  | 0  | 30 |
-            | e | 30 | 40  | 10 | 0  |
-
         When I request a travel distance matrix I should get
             |   |     x   |     y   |     d   |     e   |
             | x |     0   |  299.93 |  399.92 |  299.95 |
@@ -245,7 +182,7 @@ Feature: Basic Distance Matrix
             | d |  199.97 |  299.95 |    0    |  299.96 |
             | e |  299.95 |  399.92 |  99.98  |    0    |
 
-    Scenario: Testbot - Rectangular travel time matrix
+    Scenario: Testbot - Rectangular travel distance matrix
         Given the node map
             """
             a b c
@@ -259,50 +196,6 @@ Feature: Basic Distance Matrix
             | ad    |
             | be    |
             | cf    |
-
-        When I request a travel time matrix I should get
-            |   | a | b  | e  | f  |
-            | a | 0 | 10 | 20 | 30 |
-
-        When I request a travel time matrix I should get
-            |   |  a |
-            | a |  0 |
-            | b | 10 |
-            | e | 20 |
-            | f | 30 |
-
-        When I request a travel time matrix I should get
-            |   |  a |  b |  e |  f |
-            | a |  0 | 10 | 20 | 30 |
-            | b | 10 |  0 | 10 | 20 |
-
-        When I request a travel time matrix I should get
-            |   |  a |  b |
-            | a |  0 | 10 |
-            | b | 10 |  0 |
-            | e | 20 | 10 |
-            | f | 30 | 20 |
-
-        When I request a travel time matrix I should get
-            |   |  a |  b |  e |  f |
-            | a |  0 | 10 | 20 | 30 |
-            | b | 10 |  0 | 10 | 20 |
-            | e | 20 | 10 |  0 | 10 |
-
-        When I request a travel time matrix I should get
-            |   |  a |  b |  e |
-            | a |  0 | 10 | 20 |
-            | b | 10 |  0 | 10 |
-            | e | 20 | 10 |  0 |
-            | f | 30 | 20 | 10 |
-
-        When I request a travel time matrix I should get
-            |   |  a |  b |  e |  f |
-            | a |  0 | 10 | 20 | 30 |
-            | b | 10 |  0 | 10 | 20 |
-            | e | 20 | 10 |  0 | 10 |
-            | f | 30 | 20 | 10 |  0 |
-
 
         When I request a travel distance matrix I should get
             |   | a | b     | e      | f      |
@@ -348,7 +241,7 @@ Feature: Basic Distance Matrix
             | f | 299.95 | 199.97 | 99.98  | 0      |
 
 
-     Scenario: Testbot - Travel time 3x2 matrix
+     Scenario: Testbot - Travel distance 3x2 matrix
         Given the node map
             """
             a b c
@@ -363,10 +256,6 @@ Feature: Basic Distance Matrix
             | be    |
             | cf    |
 
-        When I request a travel time matrix I should get
-            |   | b  | e  | f  |
-            | a | 10 | 20 | 30 |
-            | b | 0  | 10 | 20 |
 
         When I request a travel distance matrix I should get
             |   | b     | e      | f      |
@@ -389,11 +278,6 @@ Feature: Basic Distance Matrix
             | ed    |
             | da    |
             | fg    |
-
-        When I request a travel time matrix I should get
-            |   | f  | g  |
-            | f | 0  | 30 |
-            | g | 30 |  0 |
 
         When I request a travel distance matrix I should get
             |   | f      | g      |
@@ -418,13 +302,6 @@ Feature: Basic Distance Matrix
             | fg    |
             | hi    |
 
-        When I request a travel time matrix I should get
-            |   | f  | g  | h  | i  |
-            | f | 0  | 30 | 0  | 30 |
-            | g | 30 |  0 | 30 | 0  |
-            | h | 0  | 30 | 0  | 30 |
-            | i | 30 |  0 | 30 | 0  |
-
         When I request a travel distance matrix I should get
             |   | f      | g      | h      | i      |
             | f | 0      | 599.91 | 0      | 599.91 |
@@ -432,7 +309,7 @@ Feature: Basic Distance Matrix
             | h | 0      | 599.91 | 0      | 599.91 |
             | i | 599.91 | 0      | 599.91 | 0      |
 
-    Scenario: Testbot - Travel time matrix with loops
+    Scenario: Testbot - Travel distance matrix with loops
         Given the node map
             """
             a 1 2 b
@@ -446,13 +323,6 @@ Feature: Basic Distance Matrix
             | cd    | yes |
             | da    | yes |
 
-        When I request a travel time matrix I should get
-            |   | 1      | 2      | 3      | 4      |
-            | 1 | 0      | 10 +-1 | 40 +-1 | 50 +-1 |
-            | 2 | 70 +-1 | 0      | 30 +-1 | 40 +-1 |
-            | 3 | 40 +-1 | 50 +-1 | 0      | 10 +-1 |
-            | 4 | 30 +-1 | 40 +-1 | 70 +-1 | 0      |
-
         When I request a travel distance matrix I should get
             |   | 1          | 2          | 3          | 4          |
             | 1 | 0          | 99.98 +-1  | 399.92 +-1 | 499.92 +-1 |
@@ -460,7 +330,7 @@ Feature: Basic Distance Matrix
             | 3 | 399.92 +-1 | 499.92 +-1 | 0          | 99.98 +-1  |
             | 4 | 299.95 +-1 | 399.92 +-1 | 699.92 +-1 | 0          |
 
-    Scenario: Testbot - Travel time matrix based on segment durations
+    Scenario: Testbot - Travel distance matrix based on segment durations
         Given the profile file
         """
         local functions = require('testbot')
@@ -493,14 +363,6 @@ Feature: Basic Distance Matrix
           | abcd  |
           | ce    |
 
-        When I request a travel time matrix I should get
-          |   |  a |  b |  c |  d |  e |
-          | a |  0 | 11 | 22 | 33 | 33 |
-          | b | 11 |  0 | 11 | 22 | 22 |
-          | c | 22 | 11 |  0 | 11 | 11 |
-          | d | 33 | 22 | 11 |  0 | 22 |
-          | e | 33 | 22 | 11 | 22 |  0 |
-
         When I request a travel distance matrix I should get
           |   | a      | b      | c      | d      | e      |
           | a | 0      | 99.98  | 199.95 | 299.95 | 399.92 |
@@ -509,7 +371,7 @@ Feature: Basic Distance Matrix
           | d | 299.95 | 199.97 | 99.98  | 0      | 299.95 |
           | e | 399.92 | 299.96 | 199.97 | 299.95 | 0      |
 
-    Scenario: Testbot - Travel time matrix for alternative loop paths
+    Scenario: Testbot - Travel distance matrix for alternative loop paths
         Given the profile file
         """
         local functions = require('testbot')
@@ -545,17 +407,6 @@ Feature: Basic Distance Matrix
             | dc    | yes    |
             | ca    | yes    |
 
-        When I request a travel time matrix I should get
-          |   |   1 |   2 |   3 |   4 |    5 |   6 |   7 |   8 |
-          | 1 |   0 |  11 |   3 |   2 |    6 |   5 | 8.9 | 7.9 |
-          | 2 |   1 |   0 |   4 |   3 |    7 |   6 | 9.9 | 8.9 |
-          | 3 |   9 |   8 |   0 |  11 |    3 |   2 | 5.9 | 4.9 |
-          | 4 |  10 |   9 |   1 |   0 |    4 |   3 | 6.9 | 5.9 |
-          | 5 |   6 |   5 |   9 |   8 |    0 |  11 | 2.9 | 1.9 |
-          | 6 |   7 |   6 |  10 |   9 |    1 |   0 | 3.9 | 2.9 |
-          | 7 | 3.1 | 2.1 | 6.1 | 5.1 |  9.1 | 8.1 |   0 |  11 |
-          | 8 | 4.1 | 3.1 | 7.1 | 6.1 | 10.1 | 9.1 |   1 | 0   |
-
         When I request a travel distance matrix I should get
           |   | 1      | 2       | 3      | 4       | 5      | 6       | 7      | 8       |
           | 1 | 0      | 1099.84 | 299.96 | 199.97  | 599.91 | 499.93  | 899.87 | 799.88  |
@@ -567,7 +418,7 @@ Feature: Basic Distance Matrix
           | 7 | 299.95 | 199.97  | 599.91 | 499.92  | 899.86 | 799.88  | 0      | 1099.83 |
           | 8 | 399.94 | 299.96  | 699.9  | 599.91  | 999.85 | 899.87  | 99.99  | 0       |
 
-    Scenario: Testbot - Travel time matrix with ties
+    Scenario: Testbot - Travel distance matrix with ties
         Given the profile file
         """
         local functions = require('testbot')
@@ -603,17 +454,6 @@ Feature: Basic Distance Matrix
         When I route I should get
           | from | to | route | distance | time | weight |
           | a    | c  | ac,ac | 200m     | 5s   |      5 |
-
-        When I request a travel time matrix I should get
-          |   | a | b | c |  d |
-          | a | 0 | 1 | 5 | 10 |
-
-        When I request a travel time matrix I should get
-          |   |  a |
-          | a |  0 |
-          | b |  1 |
-          | c | 15 |
-          | d | 10 |
 
         When I request a travel distance matrix I should get
           |   | a | b      | c      | d      |
