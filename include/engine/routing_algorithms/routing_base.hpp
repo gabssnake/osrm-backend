@@ -451,6 +451,27 @@ EdgeDistance computeEdgeDistance(const FacadeT &facade, NodeID node_id_1)
             util::coordinate_calculation::haversineDistance(coordinate_1, coordinate_2);
     }
 
+    // @TODO: REMOVE THIS
+    // datastructures to hold extracted data from geometry
+    EdgeDistance rev_total_distance = 0.0;
+
+    auto rev_geometry_range = facade.GetUncompressedReverseGeometry(geometry_index.id);
+    for (auto current = rev_geometry_range.begin() + 1; current != rev_geometry_range.end(); ++current)
+    {
+        auto prev = current - 1;
+
+        const auto coordinate_1 = facade.GetCoordinateOfNode(*prev);
+        const auto coordinate_2 = facade.GetCoordinateOfNode(*current);
+
+        rev_total_distance +=
+            util::coordinate_calculation::haversineDistance(coordinate_1, coordinate_2);
+    }
+
+    if (rev_total_distance != total_distance) {
+        std::cout << "[ERROR] rev_total_distance and total_distance: " << rev_total_distance << " " << total_distance << std::endl;
+        BOOST_ASSERT(false);
+    }
+
     return total_distance;
 }
 
